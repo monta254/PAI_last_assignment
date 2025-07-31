@@ -14,29 +14,6 @@
 	•	Python 3.13
 	•	Stable-Baselines3
 
-⸻
-
-依存パッケージのインストール
-
-ROS 2パッケージ
-
-TurtleBot3とそのシミュレーション環境を導入します：
-
-sudo apt update
-sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-gazebo
-
-また、turtlebot3_simulationsは以下からクローン：
-
-cd ~/ros2_ws/src
-git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
-cd ~/ros2_ws
-colcon build --symlink-install
-source install/setup.bash
-
-Pythonパッケージ
-
-pip install stable-baselines3[extra] gym==0.26.2 shimmy matplotlib
-
 
 ⸻
 
