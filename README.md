@@ -75,20 +75,101 @@ test.txt
 
 以下の外部リポジトリを利用：
 	•	TurtleBot3 Simulation
-	•	TurtleBot3
+ このうち、
 
 これらは自作コードには含めず、上記コマンドで各自インストールしてください。
 
 ⸻
-
-注意事項
-	•	動的障害物（動く壁など）の実装は含まれていません。固定障害物のみの迷路環境を想定しています。
-	•	ROS2ワークスペースを構築後に、各コマンドはsource install/setup.bashを実行してから利用してください。
+了解です！コンテナ環境でROS 2 + Gazeboを使った迷路走行ロボットの強化学習なら、比較的スタンダードな方法で構築できます。
 
 ⸻
 
-こう書くと、GitHub上でコード本体（train_turtlebot.py、turtlebot_env.py等）だけをアップし、TurtleBotやGazeboは外部依存として明示できます。
+🔧 前提条件
+	•	コンテナ（Docker）上でROS 2 + Gazeboが動作している
+	•	VSCode Dev Containerなどでコンテナ内に入って作業可能
+	•	Python（強化学習コード）、ROS 2ノード、Gazebo環境が連携可能な状態
 
 ⸻
 
-次に、**train_turtlebot.pyやturtlebot_env.pyの詳細な説明（行ごとのコメント）**も作成しますか？
+**全体の流れ**
+
+1. ROS 2 + Gazebo環境準備
+	•	ROS 2 Humble (or Foxy/Galactic)
+	•	gazebo_ros_pkgsをインストール
+
+sudo apt install ros-humble-gazebo-ros-pkgs
+
+2. 迷路ワールドの作成/利用
+
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+
+⸻
+
+3. 強化学習環境とのブリッジ
+	•	Gym + ROS 2を接続するために、gym-gazebo2を利用するのが一般的
+
+pip install gym
+sudo apt install ros-humble-gazebo-ros-pkgs ros-humble-rmw-cyclonedds-cpp
+
+	•	gym-gazebo2の環境構築:
+
+git clone https://github.com/AcutronicRobotics/gym-gazebo2.git
+cd gym-gazebo2
+pip install -e .
+
+
+⸻
+
+4. 強化学習アルゴリズム（例: PPO）
+	•	stable-baselines3を使用：
+
+pip install stable-baselines3
+
+例コード:
+
+import gym
+import gym_gazebo2
+from stable_baselines3 import PPO
+
+env = gym.make('TurtleBot3Maze-v0')  # gym-gazebo2の迷路環境
+model = PPO("MlpPolicy", env, verbose=1)
+model.learn(total_timesteps=50000)
+
+
+⸻
+
+5. ポリシー適用・評価
+
+obs = env.reset()
+for _ in range(1000):
+    action, _ = model.predict(obs)
+    obs, reward, done, info = env.step(action)
+    if done:
+        obs = env.reset()
+
+
+⸻
+
+6. 学習映像の記録（rosbag or video）
+	•	rosbagで記録：
+
+ros2 bag record /camera/image_raw /odom /cmd_vel
+
+	•	Pythonで動画保存：
+
+import cv2
+frames = []
+# loop内でenv.render()したフレームをframesにappendし、最後にcv2.VideoWriterで保存
+
+
+⸻
+
+🔑 参考リポジトリ
+	•	gym-gazebo2 (AcutronicRobotics)
+	•	TurtleBot3 Simulations (ROBOTIS)
+	•	Stable Baselines3 Docs
+
+⸻
+
+👉 次は「迷路環境の作成」からやる？それとも「TurtleBot3シミュレーションを動かしてRLに繋ぐ」ところからやる？
