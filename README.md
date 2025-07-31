@@ -22,11 +22,12 @@
 1.	GazeboでTurtleBot3ワールドをセットアップ・起動：
    
         cd && git clone --recursive https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
-	ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
-
+  	ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+  	
 3.	強化学習スクリプトを実行：
 
 	python3 train_turtlebot.py
+python3 train_turtlebot.py
 	python3 test.py
 
 
