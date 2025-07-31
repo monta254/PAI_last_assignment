@@ -11,7 +11,7 @@
 	•	Ubuntu 22.04 (推奨)
 	•	ROS 2 Humble
 	•	Gazebo (gazebo_ros_pkgs)
-	•	Python 3.10+
+	•	Python 3.13
 	•	Stable-Baselines3
 
 ⸻
@@ -41,15 +41,15 @@ pip install stable-baselines3[extra] gym==0.26.2 shimmy matplotlib
 ⸻
 
 実行方法
-	1.	GazeboでTurtleBot3ワールドを起動：
 
-ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+1.	GazeboでTurtleBot3ワールドを起動：
 
-	2.	強化学習スクリプトを実行：
+	ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 
-python3 train_turtlebot.py
+2.	強化学習スクリプトを実行：
 
-学習中はコンソールにエピソード進捗が表示されます。
+	python3 train_turtlebot.py
+
 
 ⸻
 
@@ -59,21 +59,15 @@ python3 train_turtlebot.py
 
 train_turtlebot.py
 	•	PPO（Proximal Policy Optimization）を用いたTurtleBot3の学習スクリプト。
-	•	Gazebo環境と連携し、学習と評価を行います。
+	•	Gazebo環境と連携し、学習を行います。
 
 turtlebot_env.py
 	•	TurtleBot3用の強化学習環境クラス（Gym形式）。
 	•	LIDARセンサ情報を状態空間とし、ロボット速度指令を行動空間として定義。
 	•	報酬関数：障害物回避、前進ボーナス、衝突ペナルティ。
 
-launch/（任意）
-	•	学習用Gazebo環境の起動設定（ROS 2 launchファイル）。
-
-worlds/（任意）
-	•	Gazeboで使用するカスタムワールドファイル（壁や障害物を追加する場合）。
-
-requirements.txt
-	•	Python依存ライブラリ一覧（pip install -r requirements.txtで一括導入可能）。
+test.txt
+	•	Gazebo環境と連携し、評価を行います。
 
 ⸻
 
